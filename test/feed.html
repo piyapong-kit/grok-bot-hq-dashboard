@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <title>HQ local feed (fake topic)</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      .feed {
+        width: min(720px, calc(100% - 32px));
+        margin: 8vh auto;
+        padding: 24px;
+        background: #171c28;
+        border: 1px solid #2a3142;
+        border-radius: 18px;
+      }
+      .feed h1 { margin-top: 0; }
+      .feed label, .feed p { color: #8d95a8; }
+      .feed input {
+        width: 100%;
+        margin: 8px 0 16px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #2a3142;
+        background: #0e131c;
+        color: #eef2f8;
+      }
+      .feed-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+      .feed button, .feed a.button {
+        appearance: none;
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        background: #4d8dff;
+        color: #071018;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .feed a.button { background: #3dcf8e; }
+      #log {
+        white-space: pre-wrap;
+        margin-top: 16px;
+        color: #c9d4ea;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.82rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="feed">
+      <p class="eyebrow">Local test only</p>
+      <h1>Publish fake sample messages</h1>
+      <p>Uses a fake ntfy topic so you can open the dashboard with <code>#&lt;topic&gt;</code>. Do not enter a real topic.</p>
+      <label for="topic">Fake topic</label>
+      <input id="topic" maxlength="80" autocomplete="off">
+      <div class="feed-actions">
+        <button id="publish" type="button">Publish samples</button>
+        <a id="open" class="button" href="../index.html">Open dashboard</a>
+      </div>
+      <p id="log"></p>
+    </main>
+    <script src="sample-messages.js"></script>
+    <script src="feed.js"></script>
+  </body>
+</html>
