@@ -39,23 +39,27 @@
           "Kai",
           "Oldie",
           "Quiet",
+          "Luz",
+          "Bee",
           '<img src=x onerror=alert(1)>'
         ]
       },
       {
         groups: {
-          Ada: "Product",
-          'Bo"ss': "Product",
-          สมชาย: "Engineering",
-          น้องบอท: "Engineering",
+          Ada: "Who paid?",
+          'Bo"ss': "Who paid?",
+          สมชาย: "Who paid?",
+          น้องบอท: "Game",
           Nok: "Research",
           Rex: "Game",
           Mia: "Homerun",
           Uno: "Ops",
           Pip: "Ops",
-          Kai: "Studio",
+          Kai: "Homerun",
           Oldie: "Research",
-          Quiet: "Product",
+          Quiet: "Who paid?",
+          Luz: "Research",
+          Bee: "Game",
           '<img src=x onerror=alert(1)>': "Ops"
         }
       },
@@ -73,8 +77,12 @@
       { looks: { Kai: { shape: "star6", color: "#67E8F9", accessory: "stem" } } },
       { looks: { Oldie: { shape: "cone", color: "#C08A5A", accessory: "none" } } },
       { looks: { Quiet: { shape: "bubble", color: "#9CA3AF", accessory: "none" } } },
+      { looks: { Luz: { shape: "pentagon", color: "#F5C16C", accessory: "glasses" } } },
+      { looks: { Bee: { shape: "sphere", color: "#7C9CFF", accessory: "antenna" } } },
       { looks: { '<img src=x onerror=alert(1)>': { shape: "trio", color: "#EF6B73", accessory: "none" } } },
       { chat: { Ada: "grokbot://app/v1/agent?id=ada-demo" } },
+      { chat: { น้องบอท: "grokbot://app/v1/agent?id=nong-demo" } },
+      { chat: { Bee: "grokbot://app/v1/agent?id=bee-demo" } },
       { chat: { Rex: "javascript:alert(1)" } },
       { chat: { Mia: "https://example.com" } },
       { bot: 'Bo"ss', status: "done", step: "ship" },
@@ -85,6 +93,8 @@
       { bot: "Pip", status: "working", step: "cleanup" },
       { bot: "Kai", status: "done", step: "render" },
       { bot: "Oldie", status: "done", step: "archive" },
+      { bot: "Luz", status: "working", step: "coding" },
+      { bot: "Bee", status: "waiting_user", step: "review" },
       { bot: '<img src=x onerror=alert(1)>', status: "idle", step: "<script>alert(1)</script>" },
       { not: "a-real-kind" },
       "plain text",
@@ -111,7 +121,7 @@
         type: "usage",
         total_used_pct: 62,
         resets_at: fridayResetIso(),
-        bots: { Ada: 18, Rex: 14, สมชาย: 11, Mia: 9, Nok: 6 }
+        bots: { Ada: 18, Rex: 14, สมชาย: 11, Mia: 9, Nok: 6, Luz: 4 }
       }
     ];
   }
@@ -128,6 +138,8 @@
       if (payload && payload.bot === "Ada") time = minutesAgo(2);
       if (payload && payload.bot === "Rex") time = minutesAgo(3);
       if (payload && payload.bot === "น้องบอท") time = minutesAgo(4);
+      if (payload && payload.bot === "Bee") time = minutesAgo(5);
+      if (payload && payload.bot === "Luz") time = minutesAgo(3);
       if (payload && payload.bot && time < minutesAgo(8) && payload.bot !== "Oldie") {
         time = minutesAgo(6);
       }

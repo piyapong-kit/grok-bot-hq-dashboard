@@ -25,8 +25,10 @@ Serve the repo root (for example `python3 -m http.server 4173`) and open:
 
 - `/` — empty-fragment welcome screen
 - `/#demo-hq-preview-not-a-real-topic` — live board against a fake topic
-- `/test/preview.html` — same UI fed from local sample messages (no network)
+- `/test/preview.html` — same UI fed from local sample messages (no network), including the 3D office
 - `/test/feed.html` — publishes those samples to a fake ntfy topic, then open the board with that fragment
+
+The board defaults to the 3D office when WebGL is available and the browser does not prefer reduced motion. A 3D/2D toggle keeps the original card floors. Three.js r185.1 is vendored under `vendor/` and served from `self`.
 
 `node test/parse-checks.js` covers merge rules, stale/health-check logic, and HTML-escaping cases (including Thai names and names with quotes).
 

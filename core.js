@@ -45,7 +45,16 @@
     stem: true,
     bow: true
   };
-  var KNOWN_FLOORS = ["Product", "Engineering", "Research", "Game", "Homerun"];
+  var UNGROUPED_FLOOR = "Other";
+  var KNOWN_FLOORS = ["Who paid?", "Game", "Homerun", "Research", "Product", "Engineering"];
+  var GENERIC_STEP = /^[a-z][a-z0-9_-]{0,23}$/;
+  var SPEECH_STATUS = {
+    working: "Working",
+    done: "Done",
+    idle: "Idle",
+    waiting_user: "Needs you",
+    error: "Error"
+  };
   var FALLBACK_COLORS = [
     "#7C9CFF",
     "#E8A0BF",
@@ -364,6 +373,7 @@
     if (team === "Lobby") return 0;
     var known = KNOWN_FLOORS.indexOf(team);
     if (known >= 0) return known + 1;
+    if (team === UNGROUPED_FLOOR) return 800;
     if (team === "Ops") return 1000;
     return 100;
   }
@@ -374,7 +384,7 @@
     var i;
     for (i = 0; i < names.length; i++) {
       var name = names[i];
-      var team = state.groups[name] || "Lobby";
+      var team = state.groups[name] || UNGROUPED_FLOOR;
       if (!buckets[team]) buckets[team] = [];
       buckets[team].push(name);
     }
@@ -527,6 +537,27 @@
     return "no report";
   }
 
+  function genericStep(step) {
+    if (typeof step !== "string") return "";
+    var word = step.trim().toLowerCase();
+    return GENERIC_STEP.test(word) ? word : "";
+  }
+
+  function speechFor(status, step) {
+    var label = SPEECH_STATUS[status];
+    if (!label) return "";
+    if (status !== "working") return label;
+    var word = genericStep(step);
+    return word ? "Working: " + word : label;
+  }
+
+  function badgeTone(status) {
+    if (status === "working" || status === "done") return "ok";
+    if (status === "waiting_user") return "wait";
+    if (status === "error") return "error";
+    return "idle";
+  }
+
   return {
     TZ: TZ,
     STALE_MS: STALE_MS,
@@ -535,6 +566,7 @@
     VALID_SHAPES: VALID_SHAPES,
     VALID_ACCESSORIES: VALID_ACCESSORIES,
     KNOWN_FLOORS: KNOWN_FLOORS,
+    UNGROUPED_FLOOR: UNGROUPED_FLOOR,
     createState: createState,
     createSeen: createSeen,
     applyPayload: applyPayload,
@@ -554,6 +586,9 @@
     ntfySseUrl: ntfySseUrl,
     ntfyPollSinceUrl: ntfyPollSinceUrl,
     statusLabel: statusLabel,
+    genericStep: genericStep,
+    speechFor: speechFor,
+    badgeTone: badgeTone,
     lookFor: lookFor,
     validColor: validColor,
     clipText: clipText
