@@ -17,7 +17,7 @@ pass("state never stores a topic");
 
 assert.ok(state.roster.indexOf("สมชาย") !== -1);
 assert.ok(state.roster.indexOf('Bo"ss') !== -1);
-assert.strictEqual(state.groups["น้องบอท"], "Engineering");
+assert.strictEqual(state.groups["น้องบอท"], "Game");
 pass("Thai names and quoted names survive");
 
 assert.strictEqual(state.looks.Ada.shape, "flower");
@@ -40,9 +40,25 @@ pass("later roster replaces earlier");
 var floors = core.buildFloors(state);
 var names = floors.map(function (floor) { return floor.team; });
 assert.strictEqual(names[names.length - 1], "Ops");
-assert.ok(names.indexOf("Studio") !== -1);
+assert.ok(names.indexOf("Who paid?") !== -1);
+assert.ok(names.indexOf("Game") !== -1);
+assert.ok(names.indexOf("Homerun") !== -1);
+assert.ok(names.indexOf("Research") !== -1);
 assert.ok(names.indexOf("Lobby") === -1);
-pass("Ops is the bottom floor and extra teams appear");
+assert.ok(names.indexOf("Other") === -1);
+assert.strictEqual(floors.length, 5);
+var botTotal = floors.reduce(function (sum, floor) { return sum + floor.bots.length; }, 0);
+assert.ok(botTotal >= 14);
+pass("five product floors, Ops at the bottom, about 14 bots");
+
+var extra = core.createState();
+core.applyPayload(extra, { roster: ["Ada", "Rex", "Zoe"] });
+core.applyPayload(extra, { groups: { Ada: "Who paid?", Rex: "Studio" } });
+var extraNames = core.buildFloors(extra).map(function (floor) { return floor.team; });
+assert.ok(extraNames.indexOf("Studio") !== -1);
+assert.ok(extraNames.indexOf("Other") !== -1);
+assert.ok(extra.groups.Zoe === undefined);
+pass("extra teams appear and ungrouped bots go to Other");
 
 assert.strictEqual(core.safeChatHref("grokbot://app/v1/agent?id=ada-demo"), "grokbot://app/v1/agent?id=ada-demo");
 assert.strictEqual(core.safeChatHref("javascript:alert(1)"), "");
@@ -80,5 +96,17 @@ assert.ok(counts.error >= 1);
 assert.ok(counts.stale >= 1);
 assert.ok(counts.no_report >= 1);
 pass("status counts include every badge");
+
+assert.strictEqual(core.speechFor("working", "coding"), "Working: coding");
+assert.strictEqual(core.speechFor("waiting_user", "review"), "Needs you");
+assert.strictEqual(core.speechFor("done", "ship"), "Done");
+assert.strictEqual(core.speechFor("idle", "<script>alert(1)</script>"), "Idle");
+assert.strictEqual(core.speechFor("error", "retry"), "Error");
+assert.strictEqual(core.genericStep("<img src=x>"), "");
+assert.strictEqual(core.genericStep("play-test_1"), "play-test_1");
+assert.strictEqual(core.badgeTone("working"), "ok");
+assert.strictEqual(core.badgeTone("done"), "ok");
+assert.strictEqual(core.badgeTone("waiting_user"), "wait");
+pass("speech text is only status plus a generic step word");
 
 console.log("\nAll parse checks passed.");

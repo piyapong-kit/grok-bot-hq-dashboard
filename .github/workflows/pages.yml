@@ -25,8 +25,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Assemble static site
         run: |
-          mkdir -p _site
-          cp index.html styles.css core.js app.js favicon.svg _site/
+          mkdir -p _site/vendor
+          cp index.html styles.css core.js app.js office3d.js favicon.svg _site/
+          cp vendor/three.module.min.js vendor/three.core.min.js vendor/THREE_LICENSE vendor/VERSION _site/vendor/
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
